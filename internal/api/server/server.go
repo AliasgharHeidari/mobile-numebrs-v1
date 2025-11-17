@@ -14,15 +14,15 @@ func Start() {
 	//User routes
 	app.Get("/user", handler.GetUserList)
 	app.Get("/user/:id", handler.GetUserByID)
-	/*
-	app.Post("/user/:id/mobilenumber", handler.AddMobileNumber)
+	app.Post("/user", handler.CreateUser)
 	app.Put("/user/:id", handler.UpdateUserByID)
-	app.Delete("/user/:id/mobilenumber/:number", handler.DeleteMobileNumber)
+	app.Delete("/user/:id", handler.DeleteUserByID)
+
 
 	//Mobile Number routes
-	app.Post("/user/:id", handler.AddMobileNumber)
-	app.Delete("/user/:id", handler.DeleteMobileNumber)
-*/
+	app.Post("/user/:id/mobilenumber", handler.AddMobileNumber)
+	app.Delete("/user/:id/mobilenumber", handler.DeleteMobileNumber)
+
 	//Listen port
 	app.Listen(":9898")
 
