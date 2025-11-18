@@ -17,7 +17,7 @@ func GetUserByID(id int) (model.User, error) {
 			return onmemory.Users[i], nil
 		}
 	}
-	return model.User{}, nil
+	return model.User{}, fmt.Errorf("user not found")
 }
 
 func CreateUser(user model.User) (int, error) {
