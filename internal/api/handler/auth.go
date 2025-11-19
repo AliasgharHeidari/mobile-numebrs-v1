@@ -15,6 +15,16 @@ import (
 		Password string `json:"password"`
 	}
 
+	// @Summary 	Login user
+	// @Description Login with username and password and return token
+	// @Tags 		auth
+	// @Accept 		json
+	// @Produce 	json
+	// @Param 		login body model.LoginRequest true "Login Request"
+	// @Success 	200 {object} model.LoginSuccessResponse
+	// @Failure 	400 {object} model.StatusBadRequestResponse
+	// @Failure 	401 {object} model.StatusUnauthorizedResponse
+	// @Router 		/user/login [post]
 func Login(c *fiber.Ctx) error {
 	
 	var UserLogin LoginRequest
