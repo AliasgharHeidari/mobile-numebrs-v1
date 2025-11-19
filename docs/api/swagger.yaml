@@ -1,0 +1,437 @@
+definitions:
+  model.AddMobileNumberSuccessResponse:
+    properties:
+      message:
+        example: Mobile number added successfully
+        type: string
+    type: object
+  model.CreateUserRequest:
+    properties:
+      age:
+        description: Age is the age of the user
+        example: 30
+        type: integer
+      familyName:
+        description: FamilyName is the family name of the user
+        example: Doe
+        type: string
+      isMarried:
+        description: IsMarried is the marital status of the user
+        example: false
+        type: boolean
+      name:
+        description: Name is the name of the user
+        example: John
+        type: string
+    type: object
+  model.CreateUserSuccessResponse:
+    properties:
+      message:
+        description: Message is the success message
+        example: User created successfully
+        type: string
+      user_id:
+        description: UserID is the ID of the created user
+        example: 1
+        type: integer
+    type: object
+  model.DeleteMobileNumberSuccessResponse:
+    properties:
+      message:
+        example: Mobile number deleted successfully
+        type: string
+    type: object
+  model.DeleteUserSuccessResponse:
+    properties:
+      message:
+        description: Message is the success message
+        example: User deleted successfully
+        type: string
+    type: object
+  model.LoginRequest:
+    properties:
+      password:
+        description: Password is the password of the user
+        example: "1234"
+        type: string
+      username:
+        description: UserName is the username of the user
+        example: Aliasghar
+        type: string
+    type: object
+  model.LoginSuccessResponse:
+    properties:
+      token:
+        description: Token is the JWT token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        type: string
+    type: object
+  model.MobileNumber:
+    properties:
+      countryCode:
+        type: string
+      isActive:
+        type: boolean
+      number:
+        type: string
+      type:
+        type: string
+    type: object
+  model.StatusBadRequestResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Invalid request body
+        type: string
+    type: object
+  model.StatusInternalServerErrorResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Internal server error
+        type: string
+    type: object
+  model.StatusNotFoundResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: User not found
+        type: string
+    type: object
+  model.StatusUnauthorizedResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Authentication failed
+        type: string
+    type: object
+  model.UpdateUserSuccessResponse:
+    properties:
+      message:
+        description: Message is the success message
+        example: User updated successfully
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        type: integer
+      familyName:
+        type: string
+      id:
+        type: integer
+      isMarried:
+        type: boolean
+      mobileNumbers:
+        items:
+          $ref: '#/definitions/model.MobileNumber'
+        type: array
+      name:
+        type: string
+    type: object
+host: 127.0.0.1:9898
+info:
+  contact:
+    name: Aliasghar Heidari
+    url: https://github.com/AliasgharHeidari
+  description: This is a sample server for Mobile Numbers API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html]
+  termsOfService: http://swagger.io/terms/
+  title: Mobile Numbers API
+  version: "1.0"
+paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all users from database and return
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create user and save it to database
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.CreateUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Create user
+      tags:
+      - users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user from database by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DeleteUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.StatusNotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Delete user by ID
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID from database and return
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.StatusNotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user by ID and save it to database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UpdateUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.StatusNotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Update user by ID
+      tags:
+      - users
+  /user/{id}/mobilenumber:
+    delete:
+      consumes:
+      - application/json
+      description: Delete mobile number from database by ID
+      parameters:
+      - description: Mobile number ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DeleteMobileNumberSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.StatusNotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Delete mobile number by ID
+      tags:
+      - mobile-numbers
+    post:
+      consumes:
+      - application/json
+      description: Add mobile number to user by ID and save it to database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Mobile number object
+        in: body
+        name: mobileNumber
+        required: true
+        schema:
+          $ref: '#/definitions/model.MobileNumber'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AddMobileNumberSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.StatusNotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.StatusInternalServerErrorResponse'
+      summary: Add mobile number to user by ID
+      tags:
+      - mobile-numbers
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with username and password and return token
+      parameters:
+      - description: Login Request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.LoginSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.StatusBadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+      summary: Login user
+      tags:
+      - auth
+security:
+- BearerAuth: []
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
