@@ -1,14 +1,14 @@
 package server
 
 import (
+	_ "github.com/AliasgharHeidari/mobile-numbers-v1/docs/api"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/handler"
+	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/middleware"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/swagger"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	_ "github.com/AliasgharHeidari/mobile-numbers-v1/docs/api"
-	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/middleware"
+	"github.com/gofiber/swagger"
 )
 func Start() {
 	app:= fiber.New()
@@ -44,7 +44,7 @@ func Start() {
 
 	//Mobile Number routes
 	app.Post("/user/:id/mobilenumber", middleware.JwtProtected(), handler.AddMobileNumber)
-	app.Delete("/user/:id/mobilenumber", middleware.JwtProtected(), handler.DeleteMobileNumber)
+	app.Delete("/user/:id/mobilenumber/:number", middleware.JwtProtected(), handler.DeleteMobileNumber)
 
 	//Listen port
 	app.Listen(cfg.Server.Host + ":" + cfg.Server.Port)
