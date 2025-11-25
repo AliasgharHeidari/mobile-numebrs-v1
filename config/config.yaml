@@ -6,3 +6,9 @@ cors:
   allowed_origins : "*"
   allowed_methods : "GET,PUT,POST,DELETE,PATCH,OPTIONS"
   allowed_headers : "Content-Type, Authorization"
+
+redis:
+  host: "localhost:6379"
+  password: ""
+  db: 0
+  timeout: 5

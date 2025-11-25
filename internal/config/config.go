@@ -12,4 +12,11 @@ type Config struct{
 		AllowedMethods string `yaml:"allowed_methods"`
 		AllowedHeaders string `yaml:"allowed_headers"`
 	} 	`yaml:"cors"`
+
+	Redis struct {
+		Host string `yaml:"host"`
+		Password string `yaml:"password"`
+		DB int `yaml:"db"`
+		Timeout int `yaml:"timeout"`
+	} 	`yaml:"redis"`
 }

@@ -26,10 +26,12 @@ import (
 	"fmt"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/server"
 	onmemory "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/on-memory"
+	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
 )
 
 func main() {
 	fmt.Println("Starting the server...")
+	dataonredis.InitRedisClient()
 	onmemory.InitUsers()
 	server.Start()
 }

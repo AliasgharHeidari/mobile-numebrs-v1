@@ -1,30 +1,35 @@
 package onmemory
 
 import (
-	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/model"
-)
+	"log"
 
-var Users []model.User
+	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/model"
+	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
+)
 
 func InitUsers() {
 
-	Users = []model.User{
+	initUsers := []model.User{
 		{
-			ID: 1,
-			Name: "ali",
-			FamilyName: "heidari",
-			Age: 30,
-			IsMarried: false,
-			MobileNumbers: []model.MobileNumber{
-				{
-					Number: "09123456789",
-					Type: "creadit",
-					IsActive: true,
-					CountryCode: "+98",
-				},
-			},
+			ID:         1,
+			Name:       "Ali",
+			FamilyName: "Heidari",
+			Age:        18,
+			IsMarried:  false,
+		},
+		{
+			ID:         2,
+			Name:       "Amir",
+			FamilyName: "Barkhordari",
+			Age:        21,
+			IsMarried:  false,
 		},
 	}
 
-
+	for _, user := range initUsers {
+		err := dataonredis.SaveUserToRedis(user)
+		if err != nil {
+			log.Printf("failed to save user %s to redis, error: %+v", user.Name, err)
+		}
+	}
 }
