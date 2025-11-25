@@ -227,11 +227,6 @@ func GetUserByID(c *fiber.Ctx) error{
 		}
 
 		number := c.Params("number")
-		if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error" : "Invalid mobile number ID",
-			})
-		}
 
 		if err := service.DeleteMobileNumber(id, number); err != nil {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
