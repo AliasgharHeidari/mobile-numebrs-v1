@@ -14,18 +14,17 @@ import (
 
 var RedisClient *redis.Client
 
-
 func InitRedisClient() {
 	if RedisClient != nil {
 		return
 	}
-	
-	cfg , _:= config.LoadConfig("config/config.yaml")
+
+	cfg, _ := config.LoadConfig("config/config.yaml")
 
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr: cfg.Redis.Host,
-		Password: cfg.Redis.Password,
-		DB: cfg.Redis.DB,
+		Addr:        cfg.Redis.Host,
+		Password:    cfg.Redis.Password,
+		DB:          cfg.Redis.DB,
 		DialTimeout: time.Duration(cfg.Redis.Timeout) * time.Second,
 	})
 
@@ -50,7 +49,6 @@ func SaveUserToRedis(user model.User) error {
 	return RedisClient.Set(ctx, key, data, 0).Err()
 }
 
-
 func LoadUserFromRedis(userID int) (*model.User, error) {
 	key := strconv.Itoa(userID)
 
@@ -70,19 +68,25 @@ func LoadUserFromRedis(userID int) (*model.User, error) {
 	return &user, nil
 }
 
-func GetAllUsersFromRedis() ([]model.User, error) {
+func GetAllUsersFromRedis(start int, end int) ([]model.User, error) {
 	var (
-		users []model.User
-		cursor uint64
+		users     []model.User
+		cursor    uint64
+		collected int
 	)
 
 	for {
-		keys, nextCursor, err := RedisClient.Scan(context.Background(), cursor, "*", 100).Result()
+		keys, nextCursor, err := RedisClient.Scan(context.Background(), cursor, "*", 2000).Result()
 		if err != nil {
 			return nil, err
 		}
 
 		for _, key := range keys {
+
+			if collected > end {
+				break
+			}
+
 			val, err := RedisClient.Get(context.Background(), key).Result()
 			if err != nil {
 				return nil, err
@@ -93,18 +97,22 @@ func GetAllUsersFromRedis() ([]model.User, error) {
 				return nil, err
 			}
 
-			users = append(users, user)
+			if collected >= start {
+				users = append(users, user)
+			}
+
+			collected++
 		}
 
+		log.Printf("Scanned %d keys, next cursor: %d\n", len(keys), nextCursor)
 		cursor = nextCursor
-		if cursor == 0 {
+		if cursor == 0 || collected <= end {
 			break
 		}
 	}
 
 	return users, nil
 }
-
 
 func DeleteUserFromRedis(userID int) error {
 	key := strconv.Itoa(userID)

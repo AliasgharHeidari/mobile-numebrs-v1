@@ -10,16 +10,17 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
 )
+
 func Start() {
-	app:= fiber.New()
+	app := fiber.New()
 
 	//Load config
-	cfg, err:= config.LoadConfig("config/config.yaml")
+	cfg, err := config.LoadConfig("config/config.yaml")
 	if err != nil {
 		panic(err)
 	}
 
-  	//CORS
+	//CORS
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: cfg.Cors.AllowedOrigins,
 		AllowMethods: cfg.Cors.AllowedMethods,
@@ -34,7 +35,7 @@ func Start() {
 
 	//User Login
 	app.Post("/user/login", handler.Login)
-	
+
 	//User routes
 	app.Get("/user", middleware.JwtProtected(), handler.GetUserList)
 	app.Get("/user/:id", middleware.JwtProtected(), handler.GetUserByID)

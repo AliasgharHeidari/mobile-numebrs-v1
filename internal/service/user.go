@@ -7,8 +7,8 @@ import (
 	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
 )
 
-func GetUserList() ([]model.User, error) {
-	return dataonredis.GetAllUsersFromRedis()
+func GetUserList(start int, end int) ([]model.User, error) {
+	return dataonredis.GetAllUsersFromRedis(start, end)
 }
 
 func GetUserByID(id int) (model.User, error) {

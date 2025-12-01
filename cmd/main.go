@@ -11,7 +11,7 @@ package main
 //@contact.url https://github.com/AliasgharHeidari
 
 //@license.name Apache 2.0
-//@license.url http://www.apache.org/licenses/LICENSE-2.0.html]
+//@license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 //@securityDefinitions.apikey BearerAuth
 //@in header
