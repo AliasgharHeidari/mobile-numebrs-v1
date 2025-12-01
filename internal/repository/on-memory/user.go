@@ -2,28 +2,25 @@ package onmemory
 
 import (
 	"log"
-
+	"fmt"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/model"
 	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
 )
 
 func InitUsers() {
 
-	initUsers := []model.User{
-		{
-			ID:         1,
-			Name:       "Ali",
-			FamilyName: "Heidari",
-			Age:        18,
-			IsMarried:  false,
-		},
-		{
-			ID:         2,
-			Name:       "Amir",
-			FamilyName: "Barkhordari",
-			Age:        21,
-			IsMarried:  false,
-		},
+	var initUsers []model.User
+
+	for i := 1; i <= 100; i++ {
+	newUser := model.User{
+			ID: i,
+			Name: fmt.Sprintf("Ali-%d", i),
+			FamilyName: fmt.Sprintf("Heidari-%d", i),
+			Age: 18,
+			IsMarried: false,
+		}
+		initUsers = append(initUsers, newUser)
+
 	}
 
 	for _, user := range initUsers {

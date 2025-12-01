@@ -21,6 +21,6 @@ build-all: build-linux-amd64 build-darwin-amd64 build-windows-amd64
 
 clean:
 	rm -rf bin/*
-	rm config.yaml
+	rm config/config.yaml
 
 .PHONY: doc build run build-linux-amd64 build-darwin-amd64 build-windows-amd64 build-all clean
