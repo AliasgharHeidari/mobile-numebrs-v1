@@ -87,17 +87,20 @@ func GetAllUsersFromRedis(start int, end int) ([]model.User, error) {
 				break
 			}
 
-			val, err := RedisClient.Get(context.Background(), key).Result()
-			if err != nil {
-				return nil, err
-			}
-
-			var user model.User
-			if err := json.Unmarshal([]byte(val), &user); err != nil {
-				return nil, err
-			}
+			log.Println("collected: ", collected)
 
 			if collected >= start {
+
+				val, err := RedisClient.Get(context.Background(), key).Result()
+				if err != nil {
+					return nil, err
+				}
+
+				var user model.User
+				if err := json.Unmarshal([]byte(val), &user); err != nil {
+					return nil, err
+				}
+
 				users = append(users, user)
 			}
 
