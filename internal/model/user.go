@@ -1,32 +1,32 @@
 package model
 
 type User struct {
-	ID int `json:"id"`
-	Name string `json:"name"`
-	FamilyName string `json:"familyName"`
-	Age int `json:"age"`
-	IsMarried bool `json:"isMarried"`
-	MobileNumbers []MobileNumber `json:"mobileNumbers"`
+	ID            int            `json:"id"  gorm:"primarykey;auto_increment"`
+	Name          string         `json:"name"`
+	FamilyName    string         `json:"familyName"`
+	Age           int            `json:"age"`
+	IsMarried     bool           `json:"isMarried"`
+	MobileNumbers []MobileNumber `json:"mobileNumbers" gorm:"foreignkey:UserID"`
 }
 
 type StatusNotFoundResponse struct {
 	// Error indicates the error message
-	Error string `json:"error" example:"User not found"` 
+	Error string `json:"error" example:"User not found"`
 }
 
 type StatusBadRequestResponse struct {
 	// Error indicates the error message
-	Error string `json:"error" example:"Invalid request body"` 
+	Error string `json:"error" example:"Invalid request body"`
 }
 
 type StatusInternalServerErrorResponse struct {
 	// Error indicates the error message
-	Error string `json:"error" example:"Internal server error"` 
+	Error string `json:"error" example:"Internal server error"`
 }
 
 type StatusUnauthorizedResponse struct {
 	// Error indicates the error message
-	Error string `json:"error" example:"Authentication failed"` 
+	Error string `json:"error" example:"Authentication failed"`
 }
 
 type LoginRequest struct {
@@ -42,29 +42,29 @@ type LoginSuccessResponse struct {
 }
 
 type CreateUserRequest struct {
-		// Name is the name of the user
-		Name string `json:"name" example:"John"`
-		// FamilyName is the family name of the user
-		FamilyName string `json:"familyName" example:"Doe"`
-		// Age is the age of the user
-		Age int `json:"age" example:"30"`
-		// IsMarried is the marital status of the user
-		IsMarried bool `json:"isMarried" example:"false"`
+	// Name is the name of the user
+	Name string `json:"name" example:"John"`
+	// FamilyName is the family name of the user
+	FamilyName string `json:"familyName" example:"Doe"`
+	// Age is the age of the user
+	Age int `json:"age" example:"30"`
+	// IsMarried is the marital status of the user
+	IsMarried bool `json:"isMarried" example:"false"`
 }
 
 type CreateUserSuccessResponse struct {
-		// Message is the success message
-		Message string `json:"message" example:"User created successfully"`
-		// UserID is the ID of the created user
-		UserID int `json:"user_id" example:"1"`
+	// Message is the success message
+	Message string `json:"message" example:"User created successfully"`
+	// UserID is the ID of the created user
+	UserID int `json:"user_id" example:"1"`
 }
 
 type DeleteUserSuccessResponse struct {
-		// Message is the success message
-		Message string `json:"message" example:"User deleted successfully"`
+	// Message is the success message
+	Message string `json:"message" example:"User deleted successfully"`
 }
 
 type UpdateUserSuccessResponse struct {
-		// Message is the success message
-		Message string `json:"message" example:"User updated successfully"`
+	// Message is the success message
+	Message string `json:"message" example:"User updated successfully"`
 }

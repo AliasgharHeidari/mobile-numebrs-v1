@@ -1,8 +1,11 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"os"
+
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/utils"
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 	type LoginRequest struct {
@@ -30,8 +33,12 @@ func Login(c *fiber.Ctx) error {
 	var UserLogin LoginRequest
 	var Creadentials Creadentials
 
-	Creadentials.UserName = "Aliasghar"
-	Creadentials.Password = "1234"
+	if err := godotenv.Load("./.env"); err != nil {
+		panic(err)
+	}
+
+	Creadentials.UserName = os.Getenv("userName")
+	Creadentials.Password = os.Getenv("password")
 
 	if err := c.BodyParser(&UserLogin); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

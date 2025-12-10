@@ -47,6 +47,9 @@ func Start() {
 	app.Post("/user/:id/mobilenumber", middleware.JwtProtected(), handler.AddMobileNumber)
 	app.Delete("/user/:id/mobilenumber/:number", middleware.JwtProtected(), handler.DeleteMobileNumber)
 
+	//Upload image
+	app.Post("/profile/upload", middleware.JwtProtected(), handler.UploadImage)
+
 	//Listen port
 	app.Listen(cfg.Server.Host + ":" + cfg.Server.Port)
 }
