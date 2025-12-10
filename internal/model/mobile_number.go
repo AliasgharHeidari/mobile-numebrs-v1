@@ -1,10 +1,12 @@
 package model
 
 type MobileNumber struct {
-	Number string `json:"number"`
-	Type string `json:"type"`
-	IsActive bool `json:"isActive"`
+	ID          uint   `json:"id" gorm:"primaryKey;autoIncrement"`
+	Number      string `json:"number"`
+	Type        string `json:"type"`
+	IsActive    bool   `json:"isActive"`
 	CountryCode string `json:"countryCode"`
+	UserID      uint   `json:"userId"`
 }
 
 type AddMobileNumberSuccessResponse struct {

@@ -2,31 +2,49 @@ package service
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
+
+	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/database"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/model"
 	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
 )
 
 func GetUserList(start int, end int) ([]model.User, error) {
 	return dataonredis.GetAllUsersFromRedis(start, end)
+	// redis.GetUserWithPagination
 }
 
 func GetUserByID(id int) (model.User, error) {
-	user, err := dataonredis.LoadUserFromRedis(id)
-	if err != nil {
+	if user, err := dataonredis.LoadUserFromRedis(id); err == nil {
+		return *user, nil
+	}
+
+	var user model.User
+
+	DB := database.GetDB()
+	if err := DB.Preload("mobile_numbers").First(&user, id).Error; err != nil {
 		return model.User{}, err
 	}
-	if user == nil {
-		return model.User{}, fmt.Errorf("user not found")
+
+	if err := dataonredis.SaveUserToRedis(user); err != nil {
+		log.Printf("could not save user to redis")
 	}
-	return  *user, nil
+
+	return user, nil
 }
 
 func CreateUser(user model.User) (int, error) {
+
 	// generate randon int as id
 	user.ID = rand.Intn(10000000)
 	err := dataonredis.SaveUserToRedis(user)
 	if err != nil {
+		return 0, err
+	}
+
+	DB := database.GetDB()
+	if err := DB.Create(&user).Error; err != nil {
 		return 0, err
 	}
 
@@ -44,7 +62,7 @@ func UpdateUserByID(id int, UpdatedUser model.User) error {
 	return nil
 }
 
-func DeleteUserByID(id int) error{
+func DeleteUserByID(id int) error {
 	err := dataonredis.DeleteUserFromRedis(id)
 	if err != nil {
 		return err
@@ -66,9 +84,9 @@ func AddMobileNumber(id int, mobileNumber model.MobileNumber) error {
 			return err
 		}
 		return nil
-	
+
 	}
-	
+
 	return fmt.Errorf("user not found")
 }
 
