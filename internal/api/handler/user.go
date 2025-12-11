@@ -35,7 +35,12 @@ func GetUserList(c *fiber.Ctx) error {
 		})
 	}
 	// TODO: handle raised error
-	limit, _ := strconv.Atoi(c.Query("limit", "5"))
+	limit, err := strconv.Atoi(c.Query("limit", "5"))
+	if err != nil || limit == 0 {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "invalid value for limit.",
+		})
+	}
 
 	if page > 0 && limit > 0 {
 		start = (page - 1) * limit
