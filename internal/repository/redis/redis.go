@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
 	"strconv"
 	"time"
 
-	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/config"
+/* 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/config" */
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/model"
+	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -18,14 +20,19 @@ func InitRedisClient() {
 	if RedisClient != nil {
 		return
 	}
-
-	cfg, _ := config.LoadConfig("config/config.yaml")
-
+	if err := godotenv.Load("./.env"); err != nil {
+		panic(err)
+	}
+	/* cfg, _ := config.LoadConfig("config/config.yaml") */
+	DB := os.Getenv("REDIS_DB")
+	Timeout := os.Getenv("REDIS_TIMEOUT")
+	intDB , _ := strconv.Atoi(DB)
+	intTimeout, _ := strconv.Atoi(Timeout)
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr:        cfg.Redis.Host,
-		Password:    cfg.Redis.Password,
-		DB:          cfg.Redis.DB,
-		DialTimeout: time.Duration(cfg.Redis.Timeout) * time.Second,
+		Addr:        os.Getenv("REDIS_HOST"),
+		Password:    os.Getenv("REDIS_PASSWORD"),
+		DB:          intDB,
+		DialTimeout: time.Duration(intTimeout) * time.Second,
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

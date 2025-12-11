@@ -26,17 +26,17 @@ import (
 
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/server"
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/database"
-	onmemory "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/on-memory"
+	/* onmemory "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/on-memory" */
 	dataonredis "github.com/AliasgharHeidari/mobile-numbers-v1/internal/repository/redis"
-	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/seeder"
+	/* 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/seeder" */
 )
 
 func main() {
 	fmt.Println("Starting the server...")
 	database.ConnectDB()
 	database.AutoMigrate()
-	seeder.SeedUser()
+	/* seeder.SeedUser() */
 	dataonredis.InitRedisClient()
-	onmemory.InitUsers()
+	/* onmemory.InitUsers() */
 	server.Start()
 }

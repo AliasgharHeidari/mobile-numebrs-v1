@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"os"
 
 	"github.com/AliasgharHeidari/mobile-numbers-v1/internal/api/utils"
@@ -37,8 +38,10 @@ func Login(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	Creadentials.UserName = os.Getenv("userName")
-	Creadentials.Password = os.Getenv("password")
+	Creadentials.UserName = os.Getenv("USER_NAME")
+	Creadentials.Password = os.Getenv("PASSWORD")
+log.Printf("username: %s, password: %s",Creadentials.UserName, Creadentials.Password)
+
 
 	if err := c.BodyParser(&UserLogin); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
