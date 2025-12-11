@@ -16,7 +16,7 @@ func GenerateToken(userName string) (string, error) {
 		panic(err)
 	}
 
-	SecretKey = []byte(os.Getenv("secretkey"))
+	SecretKey = []byte(os.Getenv("SECRET_KEY"))
 
 	claims := jwt.MapClaims{
 		"userName": userName,

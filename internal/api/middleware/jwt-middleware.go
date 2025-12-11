@@ -40,7 +40,4 @@ package middleware
 		return c.Next()
 	}
 
-
-
-
 }

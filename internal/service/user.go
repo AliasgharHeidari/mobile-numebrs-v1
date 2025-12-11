@@ -12,11 +12,12 @@ import (
 
 func GetUserList(start int, end int) ([]model.User, error) {
 	return dataonredis.GetAllUsersFromRedis(start, end)
+
 	// redis.GetUserWithPagination
 }
 
 func GetUserByID(id int) (model.User, error) {
-	if user, err := dataonredis.LoadUserFromRedis(id); err == nil {
+	if user, err := dataonredis.LoadUserFromRedis(id); err == nil && user != nil {
 		return *user, nil
 	}
 
@@ -59,6 +60,17 @@ func UpdateUserByID(id int, UpdatedUser model.User) error {
 		return err
 	}
 
+	var user model.User
+	DB := database.GetDB()
+	if err := DB.First(&user, id).Error; err != nil {
+		return err
+	}
+
+	user = UpdatedUser
+	if err := DB.Save(&user).Error; err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -68,6 +80,10 @@ func DeleteUserByID(id int) error {
 		return err
 	}
 
+	DB := database.GetDB()
+	if err := DB.Where("id = ?", id).Delete(&model.User{}).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
